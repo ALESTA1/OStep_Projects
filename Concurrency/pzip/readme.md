@@ -8,9 +8,9 @@ To compress multiple files using `pzip`, use the following command:
 
 ```bash
 ./pzip file1 file2 file3 ... > out.z
-
-## Following are some test results against wzip which is single threaded
-## For 100 files
+```
+##Following are some test results against wzip which is single threaded
+##For 100 files
 ![pzip_wzip_ratio_100_files](https://github.com/user-attachments/assets/7d005d15-4803-44b4-a36b-d0ef0dac46a4)
 ## For 1000 files
 ![pzip_wzip_ratio_1000_files](https://github.com/user-attachments/assets/43176c89-a80e-4b85-940c-3142db77da3c)
