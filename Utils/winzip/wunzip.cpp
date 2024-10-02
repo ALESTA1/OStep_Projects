@@ -31,57 +31,6 @@ void processCompressedFile(ifstream &file) {
     }
 }
 
-class threadPool {
-public:
-    threadPool(int numThreads) : stop(false) {
-        for (int i = 0; i < numThreads; i++) {
-            threads.emplace_back([this] { executeTask(); });
-        }
-    }
-
-    void addTask(function<void()> task) {
-        {
-            unique_lock<std::mutex> lock(m);
-            functionQueue.push(std::move(task));
-        }
-        cv.notify_one();
-    }
-
-    ~threadPool() {
-        {
-            unique_lock<mutex> lock(m);
-            stop = true;
-        }
-        cv.notify_all();
-        for (auto &thread : threads) {
-            if (thread.joinable()) {
-                thread.join();
-            }
-        }
-    }
-
-private:
-    void executeTask() {
-        while (true) {
-            function<void()> task;
-            {
-                unique_lock<std::mutex> lock(m);
-                cv.wait(lock, [this] { return stop || !functionQueue.empty(); });
-                if (stop && functionQueue.empty())
-                    return;
-                task = std::move(functionQueue.front());
-                functionQueue.pop();
-            }
-            task();
-        }
-    }
-
-    vector<std::thread> threads;
-    queue<function<void()>> functionQueue;
-    condition_variable cv;
-    mutex m;
-    bool stop;
-};
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         cerr << "wunzip: file1 [file2 ...]" << endl;

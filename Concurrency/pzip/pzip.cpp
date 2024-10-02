@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  threadPool threadpool_(sysconf(_SC_NPROCESSORS_CONF));
+  threadPool threadpool_(4);
   sw = new syncWrite(argc - 1);
   for (int i = 1; i < argc; ++i) {
     auto file = make_shared<ifstream>(argv[i], ios::binary);
